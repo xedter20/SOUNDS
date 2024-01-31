@@ -5,7 +5,7 @@ const player = require('play-sound')((opts = {}));
 const port = 3000;
 
 app.get('/', (req, res) => {
-  res.send('Hello World!');
+  res.send('Hello Worldss!');
 });
 
 app.get('/playAudioAlarm', (req, res) => {
