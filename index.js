@@ -30,7 +30,8 @@ app.use(express.static('public'));
 const { ImageAnnotatorClient } = require('@google-cloud/vision').v1;
 const sgMail = require('@sendgrid/mail');
 
-let SENDGRID_API_KEY = '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';
+let SENDGRID_API_KEY =
+  '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';
 
 let credentials = JSON.parse(
   JSON.stringify({
@@ -91,25 +92,50 @@ let compareText = `Health care provider`;
 
 var myString = 'Health Emergencies';
 
-let dex = b.map(name => {
-  var multiple_Word = myString.split(' ').join('|');
-  var testIfValid = new RegExp('\\b' + multiple_Word + '\\b');
-  labelFromGoogle.map(label => {
-    return;
-  });
+// let dex = b.map(name => {
+//   var multiple_Word = myString.split(' ').join('|');
+//   var testIfValid = new RegExp('\\b' + multiple_Word + '\\b');
+//   labelFromGoogle.map(label => {
+//     return;
+//   });
 
-  return { compareText, name, isValid: testIfValid.test(name) };
+//   return { compareText, name, isValid: testIfValid.test(name) };
+// });
+
+app.post('/approveIncidentReport', async (req, res) => {
+  let { email } = req.body;
+  sgMail.setApiKey(SENDGRID_API_KEY);
+  const msg = {
+    to: email,
+    from: 'admin@axztechItsolutions.com', // Use the email address or domain you verified above
+    subject: 'Incident report status',
+    text: `We would like to inform you that your submitted incident report has been completed`,
+    html: `<strong>
+         We would like to inform you that your submitted incident report has been completed
+        at ${new Date().toDateString()}
+         <strong>
+        `
+  };
+
+  console.log('Dex');
+  //ES6
+  // sgMail.send(msg).then(
+  //   () => {},
+  //   error => {
+  //     console.error(error);
+
+  //     if (error.response) {
+  //       console.error(error.response.body);
+  //     }
+  //   }
+  // );
+  res.json({
+    success: true
+  });
 });
 
-console.log(dex);
-
 app.post('/validateIncidentPhoto', async (req, res) => {
-  let { incidentPhoto ,email} = req.body;
-
-
- 
-
-
+  let { incidentPhoto, email } = req.body;
 
   let allPossibleAccident = [
     'Fire',
@@ -140,7 +166,6 @@ app.post('/validateIncidentPhoto', async (req, res) => {
           return l.description;
         });
 
-
         let test = allPossibleAccident.map(name => {
           let dex = inci.reduce((acc, current) => {
             var multiple_Word = current.split(' ').join('|');
@@ -151,21 +176,21 @@ app.post('/validateIncidentPhoto', async (req, res) => {
           return { name, test: dex.filter(t => t.found) };
         });
 
-        return  { arrayOfPassedValues : test.filter(t => t.test.length > 0 ),labelFromGoogle:inci };
+        return {
+          arrayOfPassedValues: test.filter(t => t.test.length > 0),
+          labelFromGoogle: inci
+        };
       })
       .catch(err => {
         console.error('ERROR:', err);
       });
 
-      let { arrayOfPassedValues, labelFromGoogle} = result;
+    let { arrayOfPassedValues, labelFromGoogle } = result;
     let isPassed = arrayOfPassedValues.length > 0;
-
 
     sgMail.setApiKey(SENDGRID_API_KEY);
 
-    if(isPassed){
-        
-
+    if (isPassed) {
       const msg = {
         to: email,
         from: 'admin@axztechItsolutions.com', // Use the email address or domain you verified above
@@ -173,19 +198,18 @@ app.post('/validateIncidentPhoto', async (req, res) => {
         text: `Good day. We wish to inform you that your submitted incident report has been accepted.`,
         html: '<strong>Good day. We wish to inform you that your submitted incident report has been accepted. Please wait while we take action.</strong>'
       };
-        //ES6
-         sgMail
-          .send(msg)
-          .then(() => {}, error => {
-            console.error(error);
+      //ES6
+      // sgMail.send(msg).then(
+      //   () => {},
+      //   error => {
+      //     console.error(error);
 
-            if (error.response) {
-              console.error(error.response.body)
-            }
-          });
-
-    }
-    else {
+      //     if (error.response) {
+      //       console.error(error.response.body);
+      //     }
+      //   }
+      // );
+    } else {
       const msg = {
         to: email,
         from: 'admin@axztechItsolutions.com', // Use the email address or domain you verified above
@@ -195,16 +219,16 @@ app.post('/validateIncidentPhoto', async (req, res) => {
         Please check upload photo if one of these incident meets.
         
           <ul>
-  ${
-    allPossibleAccident.map((label)=>{
-      return `<li>${label}</li>`
-    })
-  }
+  ${allPossibleAccident.map(label => {
+    return `<li>${label}</li>`;
+  })}
 
           </ul>
 
 <p>
-Image submitted: Our system detected that this image is one of the following = ${labelFromGoogle.join(',')}
+Image submitted: Our system detected that this image is one of the following = ${labelFromGoogle.join(
+          ','
+        )}
 </p>
 
 <img src="${imageDownloadPath}"/>
@@ -214,25 +238,24 @@ Image submitted: Our system detected that this image is one of the following = $
         
         .</strong>`
       };
-        //ES6
-         sgMail
-          .send(msg)
-          .then(() => {}, error => {
-            console.error(error);
+      //ES6
+      // sgMail.send(msg).then(
+      //   () => {},
+      //   error => {
+      //     console.error(error);
 
-            if (error.response) {
-              console.error(error.response.body)
-            }
-          });
-
-
+      //     if (error.response) {
+      //       console.error(error.response.body);
+      //     }
+      //   }
+      // );
     }
     res.json({
       success: true,
 
       isPassed,
       arrayOfPassedValues,
-      labelFromGoogle:labelFromGoogle
+      labelFromGoogle: labelFromGoogle
     });
   } catch (err) {
     console.log(err);

@@ -1,0 +1,13 @@
+<<<<<<< HEAD
+runtime: nodejs18
+instance_class: F2
+=======
+runtime: nodejs18
+service: default
+env_variables:
+  API_PORT: 3001
+  FRONTEND_URL: 'http://localhost:3000'
+  MONGO_URI: 'mongodb+srv://dextermiranda441:dextermiranda441@cluster0.c96bodh.mongodb.net/?retryWrites=true&w=majority'
+  TOKEN_KEY: '123'
+  PRIVATE_KEY: '1235678910abcd'
+>>>>>>> 2cc7ac9113f75fffa32a79879c7553d94bf79f53

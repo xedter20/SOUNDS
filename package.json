@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@google-cloud/vision": "^4.0.3",
     "@sendgrid/mail": "^8.1.0",
     "@tensorflow/tfjs-node": "^4.13.0",
     "@tensorflow/tfjs-node-gpu": "^4.13.0",
