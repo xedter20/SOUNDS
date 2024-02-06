@@ -199,16 +199,16 @@ app.post('/validateIncidentPhoto', async (req, res) => {
         html: '<strong>Good day. We wish to inform you that your submitted incident report has been accepted. Please wait while we take action.</strong>'
       };
       //ES6
-      // sgMail.send(msg).then(
-      //   () => {},
-      //   error => {
-      //     console.error(error);
+      sgMail.send(msg).then(
+        () => {},
+        error => {
+          console.error(error);
 
-      //     if (error.response) {
-      //       console.error(error.response.body);
-      //     }
-      //   }
-      // );
+          if (error.response) {
+            console.error(error.response.body);
+          }
+        }
+      );
     } else {
       const msg = {
         to: email,
@@ -239,16 +239,16 @@ Image submitted: Our system detected that this image is one of the following = $
         .</strong>`
       };
       //ES6
-      // sgMail.send(msg).then(
-      //   () => {},
-      //   error => {
-      //     console.error(error);
+      sgMail.send(msg).then(
+        () => {},
+        error => {
+          console.error(error);
 
-      //     if (error.response) {
-      //       console.error(error.response.body);
-      //     }
-      //   }
-      // );
+          if (error.response) {
+            console.error(error.response.body);
+          }
+        }
+      );
     }
     res.json({
       success: true,
