@@ -1,6 +1,6 @@
 const firebase = require('../database/fireBase');
 
-const mySqlCon = require('../database/mySql');
+// const mySqlCon = require('../database/mySql');
 
 const {
   getFirestore,
