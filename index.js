@@ -204,6 +204,13 @@ app.post('/validateIncidentPhoto', async (req, res) => {
     let isPassed = arrayOfPassedValues.length > 0;
 
     sgMail.setApiKey(SENDGRID_API_KEY);
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'dextermiranda441@gmail.com',
+        pass: 'lluf yifw tgqd vvsb'
+      }
+    });
 
     if (isPassed) {
       const msg = {
