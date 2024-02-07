@@ -61,6 +61,16 @@ const CONFIG = {
 
 const visionClient = new ImageAnnotatorClient(CONFIG);
 
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: 'dextermiranda441@gmail.com',
+    pass: 'lluf yifw tgqd vvsb'
+  }
+});
+
 app.get('/', (req, res) => {
   res.json('Server is running. Please proceed.');
 });
@@ -107,7 +117,7 @@ app.post('/approveIncidentReport', async (req, res) => {
   sgMail.setApiKey(SENDGRID_API_KEY);
   const msg = {
     to: email,
-    from: 'admin@axztechItsolutions.com', // Use the email address or domain you verified above
+    from: 'dextermiranda441@gmail.com', // Use the email address or domain you verified above
     subject: 'Incident report status',
     text: `We would like to inform you that your submitted incident report has been completed`,
     html: `<strong>
@@ -117,18 +127,15 @@ app.post('/approveIncidentReport', async (req, res) => {
         `
   };
 
-  console.log('Dex');
-  //ES6
-  // sgMail.send(msg).then(
-  //   () => {},
-  //   error => {
-  //     console.error(error);
-
-  //     if (error.response) {
-  //       console.error(error.response.body);
-  //     }
-  //   }
-  // );
+  transporter.sendMail(msg, (error, info) => {
+    if (error) {
+      console.log(error);
+      res.status(500).send('Error sending email');
+    } else {
+      console.log('Email sent: ' + info.response);
+      res.send('Email sent successfully');
+    }
+  });
   res.json({
     success: true
   });
@@ -193,26 +200,27 @@ app.post('/validateIncidentPhoto', async (req, res) => {
     if (isPassed) {
       const msg = {
         to: email,
-        from: 'admin@axztechItsolutions.com', // Use the email address or domain you verified above
+        from: 'dextermiranda441@gmail.com', // Use the email address or domain you verified above
         subject: 'Incident photo validation Result',
         text: `Good day. We wish to inform you that your submitted incident report has been accepted.`,
         html: '<strong>Good day. We wish to inform you that your submitted incident report has been accepted. Please wait while we take action.</strong>'
       };
-      //ES6
-      sgMail.send(msg).then(
-        () => {},
-        error => {
-          console.error(error);
 
-          if (error.response) {
-            console.error(error.response.body);
-          }
+      transporter.sendMail(msg, (error, info) => {
+        if (error) {
+          console.log(error);
+          res.status(500).send('Error sending email');
+        } else {
+          console.log('Email sent: ' + info.response);
+          res.send('Email sent successfully');
         }
-      );
+      });
+
+      return true;
     } else {
       const msg = {
         to: email,
-        from: 'admin@axztechItsolutions.com', // Use the email address or domain you verified above
+        from: 'dextermiranda441@gmail.com', // Use the email address or domain you verified above
         subject: 'Incident photo validation Result',
         text: `Good day. We wish to inform you that your submitted incident report has been rejected.`,
         html: `<strong>Good day. We wish to inform you that your submitted incident report has been rejected. 
@@ -238,17 +246,15 @@ Image submitted: Our system detected that this image is one of the following = $
         
         .</strong>`
       };
-      //ES6
-      sgMail.send(msg).then(
-        () => {},
-        error => {
-          console.error(error);
-
-          if (error.response) {
-            console.error(error.response.body);
-          }
+      transporter.sendMail(msg, (error, info) => {
+        if (error) {
+          console.log(error);
+          res.status(500).send('Error sending email');
+        } else {
+          console.log('Email sent: ' + info.response);
+          res.send('Email sent successfully');
         }
-      );
+      });
     }
     res.json({
       success: true,
@@ -262,6 +268,8 @@ Image submitted: Our system detected that this image is one of the following = $
     return res.status(500).send(err.message);
   }
 });
+
+app.get('/playSound', async (req, res) => {});
 
 const port = 8080;
 app.listen(8080, () => {
