@@ -66,7 +66,7 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: 'admin_resident_system@gmail.com',
+    user: 'dextermiranda441@gmail.com',
     pass: 'lluf yifw tgqd vvsb'
   }
 });
@@ -119,14 +119,14 @@ app.post('/approveIncidentReport', async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'admin_resident_system@gmail.com',
+        user: 'dextermiranda441@gmail.com',
         pass: 'lluf yifw tgqd vvsb'
       }
     });
 
     const msg = {
       to: email,
-      from: 'admin_resident_system@gmail.com', // Use the email address or domain you verified above
+      from: 'dextermiranda441@gmail.com', // Use the email address or domain you verified above
       subject: 'Incident report status',
       text: `We would like to inform you that your submitted incident report has been completed`,
       html: `<strong>
@@ -207,7 +207,7 @@ app.post('/validateIncidentPhoto', async (req, res) => {
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'admin_resident_system@gmail.com',
+        user: 'dextermiranda441@gmail.com',
         pass: 'lluf yifw tgqd vvsb'
       }
     });
@@ -215,7 +215,7 @@ app.post('/validateIncidentPhoto', async (req, res) => {
     if (isPassed) {
       const msg = {
         to: email,
-        from: 'admin_resident_system@gmail.com', // Use the email address or domain you verified above
+        from: 'dextermiranda441@gmail.com', // Use the email address or domain you verified above
         subject: 'Incident photo validation Result',
         text: `Good day. We wish to inform you that your submitted incident report has been accepted.`,
         html: '<strong>Good day. We wish to inform you that your submitted incident report has been accepted. Please wait while we take action.</strong>'
@@ -230,7 +230,7 @@ app.post('/validateIncidentPhoto', async (req, res) => {
     } else {
       const msg = {
         to: email,
-        from: 'admin_resident_system@gmail.com', // Use the email address or domain you verified above
+        from: 'dextermiranda441@gmail.com', // Use the email address or domain you verified above
         subject: 'Incident photo validation Result',
         text: `Good day. We wish to inform you that your submitted incident report has been rejected.`,
         html: `<strong>Good day. We wish to inform you that your submitted incident report has been rejected. 
