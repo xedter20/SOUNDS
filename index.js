@@ -127,13 +127,12 @@ app.post('/approveIncidentReport', async (req, res) => {
         `
   };
 
-  transporter.sendMail(msg, (error, info) => {
+  await transporter.sendMail(msg, (error, info) => {
     if (error) {
       console.log(error);
       res.status(500).send('Error sending email');
     } else {
-      console.log('Email sent: ' + info.response);
-      res.send('Email sent successfully');
+      return true;
     }
   });
   res.json({
@@ -206,17 +205,14 @@ app.post('/validateIncidentPhoto', async (req, res) => {
         html: '<strong>Good day. We wish to inform you that your submitted incident report has been accepted. Please wait while we take action.</strong>'
       };
 
-      transporter.sendMail(msg, (error, info) => {
+      await transporter.sendMail(msg, (error, info) => {
         if (error) {
           console.log(error);
           res.status(500).send('Error sending email');
         } else {
-          console.log('Email sent: ' + info.response);
-          res.send('Email sent successfully');
+          return true;
         }
       });
-
-      return true;
     } else {
       const msg = {
         to: email,
@@ -246,13 +242,12 @@ Image submitted: Our system detected that this image is one of the following = $
         
         .</strong>`
       };
-      transporter.sendMail(msg, (error, info) => {
+      await transporter.sendMail(msg, (error, info) => {
         if (error) {
           console.log(error);
           res.status(500).send('Error sending email');
         } else {
-          console.log('Email sent: ' + info.response);
-          res.send('Email sent successfully');
+          return true;
         }
       });
     }
