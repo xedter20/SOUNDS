@@ -116,6 +116,14 @@ app.post('/approveIncidentReport', async (req, res) => {
   let { email } = req.body;
 
   try {
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'dextermiranda441@gmail.com',
+        pass: 'lluf yifw tgqd vvsb'
+      }
+    });
+
     const msg = {
       to: email,
       from: 'dextermiranda441@gmail.com', // Use the email address or domain you verified above
@@ -132,7 +140,7 @@ app.post('/approveIncidentReport', async (req, res) => {
         res.status(500).send('Error sending email');
       }
     });
-
+    console.log('email send');
     res.json({
       success: true
     });
