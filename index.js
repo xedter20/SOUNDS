@@ -114,28 +114,33 @@ var myString = 'Health Emergencies';
 
 app.post('/approveIncidentReport', async (req, res) => {
   let { email } = req.body;
-  sgMail.setApiKey(SENDGRID_API_KEY);
-  const msg = {
-    to: email,
-    from: 'dextermiranda441@gmail.com', // Use the email address or domain you verified above
-    subject: 'Incident report status',
-    text: `We would like to inform you that your submitted incident report has been completed`,
-    html: `<strong>
+
+  let now = new Date().toDateString();
+  try {
+    const msg = {
+      to: email,
+      from: 'dextermiranda441@gmail.com', // Use the email address or domain you verified above
+      subject: 'Incident report status',
+      text: `We would like to inform you that your submitted incident report has been completed`,
+      html: `<strong>
          We would like to inform you that your submitted incident report has been completed
-        at ${new Date().toDateString()}
+        at ${now}
          <strong>
         `
-  };
+    };
 
-  await transporter.sendMail(msg, (error, info) => {
-    if (error) {
-      console.log(error);
-      res.status(500).send('Error sending email');
-    }
-  });
-  res.json({
-    success: true
-  });
+    await transporter.sendMail(msg, (error, info) => {
+      if (error) {
+        res.status(500).send('Error sending email');
+      }
+    });
+
+    res.json({
+      success: true
+    });
+  } catch (error) {
+    res.status(500).send('Error');
+  }
 });
 
 app.post('/validateIncidentPhoto', async (req, res) => {
