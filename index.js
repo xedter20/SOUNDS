@@ -131,8 +131,6 @@ app.post('/approveIncidentReport', async (req, res) => {
     if (error) {
       console.log(error);
       res.status(500).send('Error sending email');
-    } else {
-      return true;
     }
   });
   res.json({
@@ -209,8 +207,6 @@ app.post('/validateIncidentPhoto', async (req, res) => {
         if (error) {
           console.log(error);
           res.status(500).send('Error sending email');
-        } else {
-          return true;
         }
       });
     } else {
@@ -246,8 +242,6 @@ Image submitted: Our system detected that this image is one of the following = $
         if (error) {
           console.log(error);
           res.status(500).send('Error sending email');
-        } else {
-          return true;
         }
       });
     }
