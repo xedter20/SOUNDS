@@ -115,7 +115,6 @@ var myString = 'Health Emergencies';
 app.post('/approveIncidentReport', async (req, res) => {
   let { email } = req.body;
 
-  let now = new Date().toDateString();
   try {
     const msg = {
       to: email,
@@ -124,7 +123,6 @@ app.post('/approveIncidentReport', async (req, res) => {
       text: `We would like to inform you that your submitted incident report has been completed`,
       html: `<strong>
          We would like to inform you that your submitted incident report has been completed
-        at ${now}
          <strong>
         `
     };
