@@ -235,7 +235,21 @@ app.post('/validateIncidentPhoto', async (req, res) => {
       });
     } else {
       const transporter = nodemailer.createTransport({
-        service: 'gmail',
+        // service: 'gmail',
+        // This is the SMTP mail server to use for notifications.
+        // GCDS uses this mail server as a relay host.
+        host: 'smtp.gmail.com',
+        // SMTP is unlike most network protocols, which only have a single port number.
+        // SMTP has at least 3. They are port numbers 25, 587, and 465.
+        // Port 25 is still widely used as a **relay** port from one server to another.
+        // Port for SSL: 465
+        // Port for TLS/STARTTLS: 587
+        port: 465,
+        //  if true the connection will use TLS when connecting to server. If false (the
+        // default) then TLS is used if server supports the STARTTLS extension. In most
+        // cases set this value to true if you are connecting to port 465. For port 587 or
+        // 25 keep it false
+        secure: true, // use TLS
         auth: {
           user: 'dextermiranda441@gmail.com',
           pass: 'lluf yifw tgqd vvsb'
@@ -254,10 +268,12 @@ app.post('/validateIncidentPhoto', async (req, res) => {
           </ul>
 
 <p>
-
+Image submitted: Our system detected that this image is one of the following = ${labelFromGoogle.join(
+          ','
+        )}
 </p>
 
-
+<img src="${imageDownloadPath}"/>
 
 
 
