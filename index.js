@@ -250,19 +250,14 @@ app.post('/validateIncidentPhoto', async (req, res) => {
         Please check upload photo if one of these incident meets.
         
           <ul>
-  ${allPossibleAccident.map(label => {
-    return `<li>${label}</li>`;
-  })}
-
+           
           </ul>
 
 <p>
-Image submitted: Our system detected that this image is one of the following = ${labelFromGoogle.join(
-          ','
-        )}
+
 </p>
 
-<img src="${imageDownloadPath}"/>
+
 
 
 
