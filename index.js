@@ -181,6 +181,8 @@ app.post('/validateIncidentPhoto', async (req, res) => {
           return l.description;
         });
 
+        console.log(inci);
+
         let test = allPossibleAccident.map(name => {
           let dex = inci.reduce((acc, current) => {
             var multiple_Word = current.split(' ').join('|');
