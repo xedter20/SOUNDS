@@ -166,7 +166,8 @@ app.post('/validateIncidentPhoto', async (req, res) => {
     'Emergency service',
     'crime',
     'Traffic Congestion',
-    'Traffic'
+    'Traffic',
+    'Street Art'
   ];
   try {
     let id = uuid.v4();
