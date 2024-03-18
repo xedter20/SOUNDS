@@ -3,6 +3,16 @@ const cors = require('cors');
 const uuid = require('uuid');
 const fs = require('fs-extra');
 const path = require('path');
+const axios = require('axios');
+const OpenAI = require('openai');
+
+let AI_KEY = 'AIzaSyDcMnef6Jyag-dANOa-G1P02st3smgE4Tc';
+
+const { GoogleGenerativeAI } = require('@google/generative-ai');
+
+// Access your API key as an environment variable (see "Set up your API key" above)
+const genAI = new GoogleGenerativeAI(AI_KEY);
+
 const {
   enrollStudent,
   listStudent,
@@ -150,28 +160,56 @@ app.post('/approveIncidentReport', async (req, res) => {
 });
 
 app.post('/validateIncidentPhoto', async (req, res) => {
-  let { incidentPhoto, email } = req.body;
+  let { incidentPhoto, email, calamity_incident_type, description } = req.body;
 
-  let allPossibleAccident = [
-    'Fire',
-    'Earthquake',
-    'Flood',
-    'Health Emergencies',
-    'Traffic Accidents',
-    'Criminal Activities',
-    'Environmental Incidents',
-    'Natural environment',
-    'Geological phenomenon',
-    'Medical equipment',
-    'Emergency service',
-    'crime',
-    'Traffic Congestion',
-    'Traffic',
-    'Street Art',
-    'Mode of transport',
-    'Police',
-    'Law Enforcement'
-  ];
+  const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+
+  const prompt = `${description}.What should I do?`;
+
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  const analysisHelp = response.text();
+
+  console.log({ calamity_incident_type });
+
+  let mainCategory = {};
+
+  let choose = {
+    Flood: [
+      'Flood',
+      'Mud',
+      'Natural environment',
+      'Tree',
+      'Land lot',
+      'Urban design',
+      'Plant',
+      'Landscape',
+      'Geological phenomenon',
+      'City',
+      "Bird's-eye view"
+    ],
+    Fire: [
+      'Fire',
+      'Flame',
+      'Gas',
+      'Heat',
+      'Font',
+      'Event',
+      'Darkness',
+      'Art',
+      'Campfire'
+    ],
+    'Health Emergencies': [
+      'Health Emergencies',
+      'Event',
+      'Medical equipment',
+      'Emergency service',
+      'Service'
+    ]
+  };
+  let allPossibleAccident = choose[calamity_incident_type];
+
+  console.log({ allPossibleAccident });
   try {
     let id = uuid.v4();
     let imageDownloadPath = await addImageToDB({
@@ -185,12 +223,9 @@ app.post('/validateIncidentPhoto', async (req, res) => {
       .then(results => {
         const labels = results[0].labelAnnotations;
 
-        console.log('Possible Incident:');
         let inci = labels.map(l => {
           return l.description;
         });
-
-        console.log(inci);
 
         let test = allPossibleAccident.map(name => {
           let dex = inci.reduce((acc, current) => {
@@ -213,6 +248,11 @@ app.post('/validateIncidentPhoto', async (req, res) => {
 
     let { arrayOfPassedValues, labelFromGoogle } = result;
     let isPassed = arrayOfPassedValues.length > 0;
+
+    // console.log({ labelFromGoogle });
+    // console.log({ arrayOfPassedValues });
+
+    // console.log({ isPassed });
 
     if (isPassed) {
       const transporter = nodemailer.createTransport({
@@ -295,7 +335,8 @@ Image submitted: Our system detected that this image is one of the following = $
 
       isPassed,
       arrayOfPassedValues,
-      labelFromGoogle: labelFromGoogle
+      labelFromGoogle: labelFromGoogle,
+      analysisHelp
     });
   } catch (err) {
     console.log(err);
@@ -304,6 +345,39 @@ Image submitted: Our system detected that this image is one of the following = $
 });
 
 app.get('/playSound', async (req, res) => {});
+
+// async function generateChatResponse(prompt) {
+//   try {
+//     console.log({ openAPIKEY });
+//     const response = await axios.post(
+//       'https://api.openai.com/v1/completions',
+//       {
+//         model: 'text-davinci-002', // You can choose a different model if needed
+//         prompt: prompt,
+//         max_tokens: 150, // Adjust as needed
+//         temperature: 0.7, // Adjust as needed
+//         n: 1 // Number of completions to generate
+//       },
+//       {
+//         headers: {
+//           'Content-Type': 'application/json',
+//           Authorization: `Bearer ${openAPIKEY}`
+//         }
+//       }
+//     );
+
+//     return response.data.choices[0].text.trim();
+//   } catch (error) {
+//     console.error('Error generating chat response:', error);
+//     return 'Sorry, I could not process your request at the moment.';
+//   }
+// }
+
+// async function chatWithGPT(prompt) {
+//   const response = await generateChatResponse(prompt);
+//   console.log('ChatGPT Response:', response);
+// }
+// chatWithGPT("What's the weather like today?");
 
 const port = 8080;
 app.listen(8080, () => {
