@@ -178,33 +178,33 @@ app.post('/validateIncidentPhoto', async (req, res) => {
     Flood: [
       'Flood',
       'Mud',
-      'Natural environment',
-      'Tree',
-      'Land lot',
-      'Urban design',
-      'Plant',
+      // 'Natural environment',
+      // 'Tree',
+      // 'Land lot',
+      // 'Urban design',
+      // 'Plant',
       'Landscape',
-      'Geological phenomenon',
-      'City',
-      "Bird's-eye view"
+      'Geological phenomenon'
+      // 'City',
+      // "Bird's-eye view"
     ],
     Fire: [
       'Fire',
       'Flame',
       'Gas',
       'Heat',
-      'Font',
-      'Event',
-      'Darkness',
-      'Art',
+      // 'Font',
+      // 'Event',
+      // 'Darkness',
+      // 'Art',
       'Campfire'
     ],
     'Health Emergencies': [
       'Health Emergencies',
-      'Event',
+      // 'Event',
       'Medical equipment',
-      'Emergency service',
-      'Service'
+      'Emergency service'
+      // 'Service'
     ]
   };
   let allPossibleAccident = choose[calamity_incident_type];
