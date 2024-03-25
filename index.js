@@ -6,7 +6,7 @@ const path = require('path');
 const axios = require('axios');
 const OpenAI = require('openai');
 
-let AI_KEY = 'AIzaSyDcMnef6Jyag-dANOa-G1P02st3smgE4Tc';
+let AI_KEY = 'AIzaSyDcT-W-cd_Z7cMQ5wYBZPz7m7v2jGSW5l4'; // 'AIzaSyDcMnef6Jyag-dANOa-G1P02st3smgE4Tc';
 
 const { GoogleGenerativeAI } = require('@google/generative-ai');
 
@@ -162,14 +162,14 @@ app.post('/approveIncidentReport', async (req, res) => {
 app.post('/validateIncidentPhoto', async (req, res) => {
   let { incidentPhoto, email, calamity_incident_type, description } = req.body;
 
-  // const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+  const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
 
-  // const prompt = `${description}.What should I do?`;
+  const prompt = `${description}.What should I do?`;
 
-  // const result = await model.generateContent(prompt);
-  // const response = await result.response;
-  // const analysisHelp = response.text();
-  const analysisHelp = `What should I do`;
+  const result = await model.generateContent(prompt);
+  const response = await result.response;
+  const analysisHelp = response.text();
+  // const analysisHelp = `What should I do`;
 
   console.log({ calamity_incident_type });
 
